@@ -3,6 +3,7 @@ from datetime import datetime
 from django.forms import model_to_dict
 from core.erp.choices import gender_choices
 
+
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre', unique=True)
@@ -56,21 +57,34 @@ class Client(models.Model):
         verbose_name_plural = 'Clientes'
         ordering = ['id']
 
+
+# class Type(models.Model):
+#     name = models.CharField(max_length=150, verbose_name='nombre')
+#
+#     def __str__(self):
+#         return self.name
+#
+#     class Meta:
+#         verbose_name = 'Tipo'
+#         verbose_name_plural = 'Tipos'
+#         ordering = ['id']
+
+
 class Employee(models.Model):
     names = models.CharField(max_length=150, verbose_name='Nombres')
     surnames = models.CharField(max_length=150, verbose_name='Apellidos')
     dni = models.CharField(max_length=8, unique=True, verbose_name='Dni')
-    date_joined = models.DateField(default=datetime.now,verbose_name='Fecha de registro')
-    date_updated = models.DateField(default=datetime.now,verbose_name='Fecha de actualizacion')
+    date_joined = models.DateField(default=datetime.now, verbose_name='Fecha de registro')
+    date_updated = models.DateField(default=datetime.now, verbose_name='Fecha de actualizacion')
     age = models.PositiveIntegerField(default=0, verbose_name='edad')
-    salary = models.DecimalField(default=0.00,max_digits=9,decimal_places=2)
+    salary = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
     celphone = models.CharField(max_length=20, null=True, blank=True, verbose_name='Celular')
     gender = models.CharField(max_length=10, choices=gender_choices, default='male', verbose_name='Sexo')
     image = models.ImageField(upload_to='Employee/%Y/%m/%d', null=True, blank=True)
     cvitae = models.FileField(upload_to='cvitae/%Y/%m/%d', null=True, blank=True)
     state = models.BooleanField(default=True)
-
+    # type = models.ForeignKey(Type, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.names
@@ -79,6 +93,7 @@ class Employee(models.Model):
         verbose_name = 'Vendedor'
         verbose_name_plural = 'Vendedores'
         ordering = ['id']
+
 
 class Sale(models.Model):
     cli = models.ForeignKey(Client, on_delete=models.CASCADE)
@@ -111,16 +126,34 @@ class DetSale(models.Model):
         verbose_name_plural = 'Detalle de Ventas'
         ordering = ['id']
 
+
+class Business(models.Model):
+    name = models.CharField(max_length=150, verbose_name='Nombre')
+    mail = models.CharField(max_length=150, verbose_name='Correo')
+    ruc = models.CharField(max_length=10, unique=True, verbose_name='Dni')
+    image = models.ImageField(upload_to='category/%Y/%m/%d', null=True, blank=True)
+    address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
+    phone = models.CharField(max_length=150, null=True, blank=True, verbose_name='Telefono')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Empresa'
+        verbose_name_plural = 'Empresas'
+        ordering = ['id']
+
+
 class Purchase(models.Model):
     emp = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    Business = models.ForeignKey(Business, on_delete=models.CASCADE)
+    busi = models.ForeignKey(Business, on_delete=models.CASCADE)
     date_joined = models.DateField(default=datetime.now)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
     def __str__(self):
-        return self.Business.name
+        return self.busi.name
 
     class Meta:
         verbose_name = 'Compra'
@@ -144,27 +177,8 @@ class DetPurchase(models.Model):
         ordering = ['id']
 
 
-class Business(models.Model):
-    name = models.CharField(max_length=150, verbose_name='Nombre')
-    mail = models.CharField(max_length=150, verbose_name='Correo')
-    ruc = models.CharField(max_length=10, unique=True, verbose_name='Dni')
-    image = models.ImageField(upload_to='category/%Y/%m/%d', null=True, blank=True)
-    # birthday = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')
-    address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
-    phone = models.CharField(max_length=150, null=True, blank=True, verbose_name='Telefono')
-
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Empresa'
-        verbose_name_plural = 'Empresas'
-        ordering = ['id']
-
 class Department(models.Model):
     name = models.CharField(max_length=150, verbose_name='Nombre')
-
 
     def __str__(self):
         return self.name
@@ -186,6 +200,7 @@ class Province(models.Model):
         verbose_name = 'Provincia'
         verbose_name_plural = 'Provincias'
         ordering = ['id']
+
 
 class District(models.Model):
     Province = models.ForeignKey(Province, on_delete=models.CASCADE)
