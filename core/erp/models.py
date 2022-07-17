@@ -42,10 +42,11 @@ class Client(models.Model):
     names = models.CharField(max_length=150, verbose_name='Nombres')
     surnames = models.CharField(max_length=150, verbose_name='Apellidos')
     dni = models.CharField(max_length=8, unique=True, verbose_name='Dni')
-    birthday = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')
+    age = models.PositiveIntegerField(default=0, verbose_name='edad')
     address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
     celphone = models.CharField(max_length=20, null=True, blank=True, verbose_name='Celular')
-    sexo = models.CharField(max_length=10, choices=gender_choices, default='male', verbose_name='Sexo')
+    gender = models.CharField(max_length=10, choices=gender_choices, default='male', verbose_name='Sexo')
+    state = models.BooleanField(default=True)
 
     def __str__(self):
         return self.names
@@ -55,15 +56,21 @@ class Client(models.Model):
         verbose_name_plural = 'Clientes'
         ordering = ['id']
 
-class Seller(models.Model):
+class Employee(models.Model):
     names = models.CharField(max_length=150, verbose_name='Nombres')
     surnames = models.CharField(max_length=150, verbose_name='Apellidos')
     dni = models.CharField(max_length=8, unique=True, verbose_name='Dni')
-    birthday = models.DateField(default=datetime.now, verbose_name='Fecha de nacimiento')
+    date_joined = models.DateField(default=datetime.now,verbose_name='Fecha de registro')
+    date_updated = models.DateField(default=datetime.now,verbose_name='Fecha de actualizacion')
+    age = models.PositiveIntegerField(default=0, verbose_name='edad')
+    salary = models.DecimalField(default=0.00,max_digits=9,decimal_places=2)
     address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
     celphone = models.CharField(max_length=20, null=True, blank=True, verbose_name='Celular')
-    sexo = models.CharField(max_length=10, choices=gender_choices, default='male', verbose_name='Sexo')
-    image = models.ImageField(upload_to='seller/%Y/%m/%d', null=True, blank=True)
+    gender = models.CharField(max_length=10, choices=gender_choices, default='male', verbose_name='Sexo')
+    image = models.ImageField(upload_to='Employee/%Y/%m/%d', null=True, blank=True)
+    cvitae = models.FileField(upload_to='cvitae/%Y/%m/%d', null=True, blank=True)
+    state = models.BooleanField(default=True)
+
 
     def __str__(self):
         return self.names
@@ -105,7 +112,7 @@ class DetSale(models.Model):
         ordering = ['id']
 
 class Purchase(models.Model):
-    sell = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    emp = models.ForeignKey(Employee, on_delete=models.CASCADE)
     Business = models.ForeignKey(Business, on_delete=models.CASCADE)
     date_joined = models.DateField(default=datetime.now)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
