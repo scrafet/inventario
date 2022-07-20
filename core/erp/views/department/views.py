@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView
-from core.erp.models import Category
+from core.erp.models import Department
 
 
 # def category_list(request):
@@ -12,9 +12,9 @@ from core.erp.models import Category
 #     }
 #     return render(request, 'category/list.html', data)
 
-class CategoryListView(ListView):
-    model = Category
-    template_name = 'category/list.html'
+class DepartmentListView(ListView):
+    model = Department
+    template_name = 'department/list.html'
 
     # @method_decorator(login_required) 'solicita login
     # @method_decorator(csrf_exempt)   #quitaMiddleware
@@ -28,7 +28,7 @@ class CategoryListView(ListView):
         data = {}
         try:
             # print(request.POST)
-            data = Category.objects.get(pk=request.POST['id']).toJSON()
+            data = Department.objects.get(pk=request.POST['id']).toJSON()
             # data['name'] = cat.name
         except Exception as e:
             data['error'] = str(e)
@@ -37,6 +37,6 @@ class CategoryListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Listado de Categorías'
-        context['create_url'] = reverse_lazy('erp:category_create')
+        context['title'] = 'Listado de Departamentos'
+        context['create_url'] = reverse_lazy('erp:department_create')
         return context
