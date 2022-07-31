@@ -1,8 +1,9 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView
 from core.erp.models import Department
+from core.erp.forms import DepartmentForm
 
 
 # def category_list(request):
@@ -39,4 +40,26 @@ class DepartmentListView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de Departamentos'
         context['create_url'] = reverse_lazy('erp:department_create')
+        return context
+class DepartmentCreateView(CreateView):
+    model = Department
+    form_class = DepartmentForm
+    template_name = 'department/create.html'
+    success_url = reverse_lazy('erp:category_list')
+
+    # def post(self, request, *args, **kwargs):
+    #     print(request.POST)
+    #     form = CategoryForm(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         return HttpResponseRedirect(self.success_url)
+    #     context = self.get_context_data(**kwargs)
+    #     context['form'] = form
+    #     return render(request, self.template_name, context)
+    #     print(form.errors)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Listado de Categorías'
+        context['create_url'] = reverse_lazy('erp:category_create')
         return context
