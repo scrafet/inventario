@@ -45,6 +45,7 @@ class DepartmentForm(ModelForm):
             'name': TextInput(
                 attrs={
                     'placeholder': 'ingrese un nombre',
+                    'autocomplete': 'off'
                 }
             ),
         }

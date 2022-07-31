@@ -41,11 +41,13 @@ class DepartmentListView(ListView):
         context['title'] = 'Listado de Departamentos'
         context['create_url'] = reverse_lazy('erp:department_create')
         return context
+
+
 class DepartmentCreateView(CreateView):
     model = Department
     form_class = DepartmentForm
     template_name = 'department/create.html'
-    success_url = reverse_lazy('erp:category_list')
+    success_url = reverse_lazy('erp:department_list')
 
     # def post(self, request, *args, **kwargs):
     #     print(request.POST)
@@ -60,6 +62,6 @@ class DepartmentCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Listado de Categorías'
-        context['create_url'] = reverse_lazy('erp:category_create')
+        context['title'] = 'Listado de Departamentos'
+        context['create_url'] = reverse_lazy('erp:department_create')
         return context
